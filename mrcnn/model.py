@@ -1229,7 +1229,6 @@ def load_image_gt(dataset, config, image_id, augmentation=None):
         of the image unless use_mini_mask is True, in which case they are
         defined in MINI_MASK_SHAPE.
     """
-    print(dataset.num_classes)
     # Load image and mask
     image = dataset.load_image(image_id)
     mask, class_ids = dataset.load_mask(image_id)
@@ -2334,7 +2333,7 @@ class MaskRCNN(object):
             keras.callbacks.TensorBoard(log_dir=self.log_dir,
                                         histogram_freq=0, write_graph=True, write_images=False),
             keras.callbacks.ModelCheckpoint(self.checkpoint_path,  monitor='val_loss', save_best_only=True,
-                                            verbose=0, save_weights_only=True),
+                                            verbose=2, save_weights_only=True),
         ]
 
         # Add custom callbacks to the list
@@ -2365,7 +2364,7 @@ class MaskRCNN(object):
             validation_steps=self.config.VALIDATION_STEPS,
             max_queue_size=100,
             workers=workers,
-            use_multiprocessing=workers > 1,
+            use_multiprocessing=False,
         )
         self.epoch = max(self.epoch, epochs)
 

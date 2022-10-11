@@ -44,7 +44,7 @@ class CustomConfig(Config):
 
 
         classes_number = num_classes
-        self.NUM_CLASSES = num_classes+ 1
+        self.NUM_CLASSES = num_classes + 1
 
         super().__init__()
     """Configuration for training on the toy shapes dataset.
@@ -203,7 +203,7 @@ class CustomDataset(utils.Dataset):
 
         mask = np.dstack(instance_masks)
         class_ids = np.array(class_ids, dtype=np.int32)
-        print("Class_ids, ", class_ids)
+        # print("Class_ids, ", class_ids)
         return mask, class_ids
 
     def count_classes(self):
