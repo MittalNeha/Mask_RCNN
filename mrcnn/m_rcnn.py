@@ -42,12 +42,10 @@ if not os.path.exists(COCO_MODEL_PATH):
 class CustomConfig(Config):
     def __init__(self, num_classes):
 
-        if num_classes > 1:
-            # raise ValueError("{} classes were found. This is a DEMO version, and it only supports 1 class. Get the PRO version to"
-            #       " continue the training.".format(num_classes))
-            self.NUM_CLASSES += (num_classes -1)
 
         classes_number = num_classes
+        self.NUM_CLASSES = num_classes+ 1
+
         super().__init__()
     """Configuration for training on the toy shapes dataset.
     Derives from the base Config class and overrides values specific
@@ -62,7 +60,7 @@ class CustomConfig(Config):
     IMAGES_PER_GPU = 4
 
     # Number of classes
-    NUM_CLASSES = 1 + 1
+    NUM_CLASSES = 2 + 1
 
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
@@ -205,7 +203,7 @@ class CustomDataset(utils.Dataset):
 
         mask = np.dstack(instance_masks)
         class_ids = np.array(class_ids, dtype=np.int32)
-        #print("Class_ids, ", class_ids)
+        print("Class_ids, ", class_ids)
         return mask, class_ids
 
     def count_classes(self):
