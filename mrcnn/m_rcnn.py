@@ -62,6 +62,9 @@ class CustomConfig(Config):
     # Number of classes
     NUM_CLASSES = 2 + 1
 
+    # Change the backbone
+    BACKBONE = "resnet50"
+
     # Use small images for faster training. Set the limits of the small side
     # the large side, and that determines the image shape.
     IMAGE_MIN_DIM = 512
@@ -75,7 +78,7 @@ class CustomConfig(Config):
     # TRAIN_ROIS_PER_IMAGE = 32
 
     # Use a small epoch since the data is simple
-    STEPS_PER_EPOCH = 500
+    STEPS_PER_EPOCH = 60
 
     # use small validation steps since the epoch is small
     VALIDATION_STEPS = 5
@@ -270,10 +273,10 @@ def train_head(model, dataset_train, dataset_val, config,epochs):
             layers='heads')
 
 
-def train_all_layers(model, dataset_train, dataset_val, config):
+def train_all_layers(model, dataset_train, dataset_val, config, epochs):
     model.train(dataset_train, dataset_val,
                 learning_rate=config.LEARNING_RATE / 10,
-                epochs=5,
+                epochs=epochs,
                 layers="all")
 
 
@@ -282,6 +285,7 @@ def train_all_layers(model, dataset_train, dataset_val, config):
 class InferenceConfig(CustomConfig):
     GPU_COUNT = 1
     IMAGES_PER_GPU = 1
+    USE_MINI_MASK = False
 
 def extract_images(my_zip, output_dir):
     # Make directory if it doesn't exist
@@ -343,7 +347,7 @@ def test_random_image(test_model, dataset_val, inference_config):
     image_id = random.choice(dataset_val.image_ids)
     original_image, image_meta, gt_class_id, gt_bbox, gt_mask = \
         modellib.load_image_gt(dataset_val, inference_config,
-                               image_id, use_mini_mask=False)
+                               image_id)
 
     log("original_image", original_image)
     # log("image_meta", image_meta)
